@@ -19,7 +19,7 @@ Queste regole valgono per ogni modifica al repository.
   ```
 
 - I servizi non pubblicano porte sull'host. Si espongono solo tramite Traefik,
-  con label su `<nome>.localhost`.
+  con label su `<nome>.home.arpa` (dominio riservato alle reti domestiche, RFC 8375).
 
 ## Immagini
 

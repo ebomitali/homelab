@@ -1,0 +1,16 @@
+# Dati degli stack: mai su git
+data/
+
+# Segreti: solo nei .env locali (.env.example resta versionato)
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# File di sistema e editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,86 @@
+Step 1: cartella progetto con le regole nel CLAUDE.md
+Step 2: Traefik, Portainer e le API key nel .env
+Step 3: Un servizio da git, tramite l'API di Portainer
+Step 4: Servizio aggiuntivo
+Step 5: "Non risponde": prima la cause poi il fix
+Skill: le skill da creare, proposte da CLAUDE
+
+Step 1: CLAUDE.md
+
+Voglio gestire il mio server di casa con Docker, partendo da questa cartella.
+
+prompt >>
+Crea un CLAUDE.md con queste regole:
+- ogni servizio è uno stack in stacks/<nome>/docker-compose.yml
+- i dati di uno stack stanno in una cartella con il suo nome, mai su git
+- tutti i servizi stanno sulla rete "homelab" e si espongono solo
+  tramite Traefik, su <nome>.localhost
+- immagini con versione fissa, mai latest
+- segreti solo nel .env, mai nei file versionati
+
+Poi crea .gitignore e .env.example, inizializza git e collega il repo
+[url del tuo repo GitHub]. Alla fine spiegami in breve cosa hai fatto.
+<<
+
+In bash mkdir -p homelab && cd homelab && claude e inserire il prompt
+
+Step 2: Traefik e Portainer
+
+prompt >>
+Crea gli stack traefik e portainer seguendo il CLAUDE.md e avviali in locale.
+
+Traefik è l'unico ingresso, con la dashboard su traefik.localhost.
+Portainer deve rispondere su portainer.localhost.
+
+Quando funziona, spiegami il primo accesso a Portainer, compreso il
+setup token che chiede, e come creare la API key.
+La metto io nel .env: tu leggila solo da lì.
+
+Su Portainer, creare l'utente admin e la API key da mettere nel file .env (va in .gitignore)
+<<
+
+Step 3: AdGuard Home
+
+prompt >>
+Aggiungi AdGuard Home come nuovo stack, con l'interfaccia su
+adguard.localhost. Al primo avvio la configurazione guidata gira sulla
+porta 3000: falla raggiungere da adguard.localhost.
+
+Poi:
+1. fai commit e push
+2. usa l'API di Portainer (URL e chiave nel .env) per creare lo stack
+   direttamente dal repo git. Se il repo è privato, prima dimmi come
+   creare un token GitHub di sola lettura: lo metto io nel .env
+3. verifica che adguard.localhost risponda e guidami nella
+   prima configurazione
+<<
+
+Step 4: Nuovo servizio
+
+prompt >>
+Vorrei [cosa vuoi fare a casa].
+
+Proponimi due o tre servizi self-hosted adatti, con pro e contro di ognuno.
+Aspetta che io scelga, poi installalo seguendo il CLAUDE.md,
+come abbiamo fatto con AdGuard Home.
+<<
+
+Step 5: Non funziona?
+
+prompt >>
+Lo stack [nome] non risponde su [nome].localhost.
+
+Controlla container, log e configurazione di Traefik.
+Dimmi qual è la causa e proponi il fix,
+ma non applicarlo finché non ti dico ok.
+<<
+
+Step 5: Chiedi a CLAUDE di creare gli skill
+
+prompt >>
+Rileggi questa conversazione e proponimi le skill che varrebbe la pena
+creare, così la prossima volta non riparto da zero.
+
+Per ognuna dimmi nome, a cosa serve e quando si dovrebbe attivare.
+Poi crea solo quelle che scelgo io.
+<<

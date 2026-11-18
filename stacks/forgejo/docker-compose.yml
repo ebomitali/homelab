@@ -1,0 +1,40 @@
+# Forgejo (LTS 15.0): server Git self-hosted, fork di Gitea.
+# Interfaccia: http://git.home.arpa (via Traefik)
+# Primo avvio: procedura guidata su http://git.home.arpa; creare subito l'admin.
+# Nessuna porta pubblicata sull'host: si usa HTTPS, SSH non esposto.
+# Repository e LFS su volumi dedicati (vedi variabili sotto).
+services:
+  forgejo:
+    image: codeberg.org/forgejo/forgejo:15.0
+    container_name: forgejo
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Rome
+      - USER_UID=1000
+      - USER_GID=1000
+      - FORGEJO__server__DOMAIN=git.home.arpa
+      - FORGEJO__server__ROOT_URL=http://git.home.arpa/
+      - FORGEJO__service__DISABLE_REGISTRATION=true
+      # Percorsi dei dati nel container (mappati sotto sui volumi dell'host).
+      - FORGEJO__repository__ROOT=/repositories
+      - FORGEJO__lfs__PATH=/lfs
+      # Solo il proxy Traefik (rete homelab) può fornire l'IP reale del client.
+      - FORGEJO__security__REVERSE_PROXY_TRUSTED_PROXIES=172.18.0.0/16,127.0.0.0/8,::1/128
+    # DATA_ROOT: cartella `data/` dell'host (variabile dello stack in Portainer),
+    # usata per la configurazione e il database di Forgejo.
+    # FORGEJO_REPOS_DIR e FORGEJO_LFS_DIR: default sui volumi dedicati.
+    volumes:
+      - ${DATA_ROOT:?impostare DATA_ROOT}/forgejo:/data
+      - ${FORGEJO_REPOS_DIR:-/Volumes/forgejo/repository}:/repositories
+      - ${FORGEJO_LFS_DIR:-/Volumes/forgejo/lfs}:/lfs
+    networks:
+      - homelab
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.forgejo.rule=Host(`git.home.arpa`)
+      - traefik.http.routers.forgejo.entrypoints=web
+      - traefik.http.services.forgejo.loadbalancer.server.port=3000
+
+networks:
+  homelab:
+    external: true

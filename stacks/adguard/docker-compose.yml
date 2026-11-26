@@ -1,5 +1,5 @@
 # AdGuard Home: DNS con filtro pubblicitario.
-# Interfaccia: http://adguard.home.arpa (via Traefik)
+# Interfaccia: http://adguard.${DOMAIN} (via Traefik; DOMAIN nel .env dello stack)
 # Primo avvio: la configurazione guidata risponde sulla porta 3000 del container.
 # Dopo il setup la web UI passa alla porta scelta nel wizard: aggiorna la label
 # `loadbalancer.server.port` di conseguenza.
@@ -20,7 +20,7 @@ services:
       - homelab
     labels:
       - traefik.enable=true
-      - traefik.http.routers.adguard.rule=Host(`adguard.home.arpa`)
+      - traefik.http.routers.adguard.rule=Host(`adguard.${DOMAIN:?impostare DOMAIN}`)
       - traefik.http.routers.adguard.entrypoints=web
       - traefik.http.services.adguard.loadbalancer.server.port=3000
 

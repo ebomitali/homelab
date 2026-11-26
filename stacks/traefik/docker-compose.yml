@@ -1,5 +1,5 @@
 # Traefik: unico ingresso del homelab.
-# Dashboard: http://traefik.home.arpa
+# Dashboard: http://traefik.${DOMAIN} (DOMAIN nel .env dello stack)
 services:
   traefik:
     image: traefik:v3.7.16
@@ -22,7 +22,7 @@ services:
       - homelab
     labels:
       - traefik.enable=true
-      - traefik.http.routers.traefik.rule=Host(`traefik.home.arpa`)
+      - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN:?impostare DOMAIN}`)
       - traefik.http.routers.traefik.entrypoints=web
       - traefik.http.routers.traefik.service=api@internal
 

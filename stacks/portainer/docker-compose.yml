@@ -1,5 +1,5 @@
 # Portainer CE: gestione dei container.
-# Interfaccia: http://portainer.home.arpa (via Traefik)
+# Interfaccia: http://portainer.${DOMAIN} (via Traefik; DOMAIN nel .env dello stack)
 services:
   portainer:
     image: portainer/portainer-ce:2.45.3
@@ -15,7 +15,7 @@ services:
       - homelab
     labels:
       - traefik.enable=true
-      - traefik.http.routers.portainer.rule=Host(`portainer.home.arpa`)
+      - traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN:?impostare DOMAIN}`)
       - traefik.http.routers.portainer.entrypoints=web
       - traefik.http.services.portainer.loadbalancer.server.port=9000
 

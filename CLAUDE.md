@@ -19,7 +19,10 @@ Queste regole valgono per ogni modifica al repository.
   ```
 
 - I servizi non pubblicano porte sull'host. Si espongono solo tramite Traefik,
-  con label su `<nome>.home.arpa` (dominio riservato alle reti domestiche, RFC 8375).
+  con label su `<nome>.${DOMAIN}`, dove `DOMAIN` è la variabile nel `.env` dello stack
+  (es. `DOMAIN=home.zebco.it`, quindi `portainer.home.zebco.it`).
+  Le label usano `${DOMAIN:?impostare DOMAIN}`, così lo stack non parte senza dominio.
+- Traefik è l'unico stack che pubblica porte (80) sull'host.
 
 ## Immagini
 

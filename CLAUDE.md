@@ -8,6 +8,14 @@ Queste regole valgono per ogni modifica al repository.
 - I dati di uno stack stanno in una cartella con il suo nome, sotto `data/<nome>/`.
   I dati non vanno mai committati su git (la cartella `data/` è in `.gitignore`).
 
+## Container di bootstrap
+
+- `traefik` e `portainer` sono i container di bootstrap: Traefik serve l'accesso a Portainer,
+  quindi non possono essere gestiti da Portainer stesso.
+- Si avviano e si aggiornano dalla riga di comando, dentro la cartella dello stack:
+  `cd stacks/<nome> && docker compose up -d`. In Portainer risultano come stack "external"
+  e non hanno editor né "Edit stack settings": è atteso, non un errore.
+
 ## Rete ed esposizione
 
 - Tutti i servizi stanno sulla rete Docker esterna `homelab`:

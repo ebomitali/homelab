@@ -1,5 +1,5 @@
 # Portainer CE: gestione dei container.
-# Interfaccia: http://portainer.${DOMAIN} (via Traefik; DOMAIN nel .env dello stack)
+# Interfaccia: https://portainer.${DOMAIN} (via Traefik; DOMAIN nel .env dello stack)
 services:
   portainer:
     image: portainer/portainer-ce:2.45.3
@@ -16,7 +16,8 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.portainer.rule=Host(`portainer.${DOMAIN:?impostare DOMAIN}`)
-      - traefik.http.routers.portainer.entrypoints=web
+      - traefik.http.routers.portainer.entrypoints=websecure
+      - traefik.http.routers.portainer.tls=true
       - traefik.http.services.portainer.loadbalancer.server.port=9000
 
 networks:

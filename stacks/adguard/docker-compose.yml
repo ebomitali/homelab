@@ -16,6 +16,10 @@ services:
     volumes:
       - ${DATA_ROOT:?impostare DATA_ROOT}/adguard/work:/opt/adguardhome/work
       - ${DATA_ROOT:?impostare DATA_ROOT}/adguard/conf:/opt/adguardhome/conf
+    # Eccezione (vedi CLAUDE.md): DNS solo su loopback dell'host, non sulla LAN.
+    ports:
+      - "127.0.0.1:53:53/udp"
+      - "127.0.0.1:53:53/tcp"
     networks:
       - homelab
     labels:

@@ -1,5 +1,7 @@
 # Traefik: unico ingresso del homelab.
-# Dashboard: http://traefik.${DOMAIN} (DOMAIN nel .env dello stack)
+# Dashboard: https://traefik.${DOMAIN} (DOMAIN e DATA_ROOT nel .env dello stack)
+# HTTP (80) reindirizza a HTTPS (443). Il certificato è creato con mkcert,
+# vedi stacks/traefik/tls.yml.example e CLAUDE.md (sezione TLS).
 services:
   traefik:
     image: traefik:v3.7.16
@@ -11,19 +13,31 @@ services:
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       - --providers.docker.network=homelab
+      - --providers.file.directory=/dynamic
+      - --providers.file.watch=true
       - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.websecure.address=:443
       - --api.dashboard=true
       - --log.level=INFO
     ports:
       - "80:80"
+      - "443:443"
+    # DATA_ROOT: cartella `data/` dell'host (path assoluto, come per AdGuard).
+    #   ${DATA_ROOT}/traefik/certs    -> certificati mkcert (home.zebco.it.pem, home.zebco.it-key.pem)
+    #   ${DATA_ROOT}/traefik/dynamic  -> tls.yml (copia di stacks/traefik/tls.yml.example)
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${DATA_ROOT:?impostare DATA_ROOT}/traefik/dynamic:/dynamic:ro
+      - ${DATA_ROOT:?impostare DATA_ROOT}/traefik/certs:/certs:ro
     networks:
       - homelab
     labels:
       - traefik.enable=true
       - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN:?impostare DOMAIN}`)
-      - traefik.http.routers.traefik.entrypoints=web
+      - traefik.http.routers.traefik.entrypoints=websecure
+      - traefik.http.routers.traefik.tls=true
       - traefik.http.routers.traefik.service=api@internal
 
 networks:

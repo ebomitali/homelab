@@ -22,10 +22,19 @@ Queste regole valgono per ogni modifica al repository.
   con label su `<nome>.${DOMAIN}`, dove `DOMAIN` è la variabile nel `.env` dello stack
   (es. `DOMAIN=home.zebco.it`, quindi `portainer.home.zebco.it`).
   Le label usano `${DOMAIN:?impostare DOMAIN}`, così lo stack non parte senza dominio.
-- Traefik è l'unico stack che pubblica porte (80) sull'host.
+- Traefik è l'unico stack che pubblica porte (80 e 443) sull'host. La 80 reindirizza a HTTPS (443).
+- Tutti i servizi web usano `entrypoints=websecure` e `tls=true` (vedi sezione TLS).
 - Eccezione: AdGuard (`stacks/adguard`) pubblica DNS 53/udp e 53/tcp solo
   sull'IP LAN del server (`192.168.1.11`), così i dispositivi della rete domestica
   possono usarlo come DNS. Nessuna altra porta, e nessun bind su `0.0.0.0`.
+
+## TLS
+
+- I certificati sono creati con `mkcert` (CA locale) e stanno in `data/traefik/certs/`.
+  Non vanno mai committati. La chiave della CA (`rootCA-key.pem`) resta solo sul server.
+- La configurazione TLS per Traefik sta in `data/traefik/dynamic/tls.yml`, copia di
+  `stacks/traefik/tls.yml.example`.
+- Ogni dispositivo che usa l'homelab deve avere installato `rootCA.pem` (solo il certificato, mai la chiave).
 
 ## Immagini
 

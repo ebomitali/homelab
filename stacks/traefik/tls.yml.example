@@ -1,0 +1,8 @@
+# Certificato TLS per Traefik (provider file).
+# Copia questo file in `${DATA_ROOT}/traefik/dynamic/tls.yml` e crea i certificati
+# con mkcert nella cartella `${DATA_ROOT}/traefik/certs/` (vedi CLAUDE.md, sezione TLS).
+# I percorsi sono quelli VISTI DAL CONTAINER Traefik (montaggio /certs).
+tls:
+  certificates:
+    - certFile: /certs/home.zebco.it.pem
+      keyFile: /certs/home.zebco.it-key.pem

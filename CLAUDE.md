@@ -23,9 +23,9 @@ Queste regole valgono per ogni modifica al repository.
   (es. `DOMAIN=home.zebco.it`, quindi `portainer.home.zebco.it`).
   Le label usano `${DOMAIN:?impostare DOMAIN}`, così lo stack non parte senza dominio.
 - Traefik è l'unico stack che pubblica porte (80) sull'host.
-- Eccezione: AdGuard (`stacks/adguard`) pubblica DNS 53/udp e 53/tcp solo su
-  `127.0.0.1`, così questa macchina può risolvere `*.home.zebco.it` tramite AdGuard.
-  Nessuna altra porta, e nessun bind su interfacce LAN.
+- Eccezione: AdGuard (`stacks/adguard`) pubblica DNS 53/udp e 53/tcp solo
+  sull'IP LAN del server (`192.168.1.11`), così i dispositivi della rete domestica
+  possono usarlo come DNS. Nessuna altra porta, e nessun bind su `0.0.0.0`.
 
 ## Immagini
 
